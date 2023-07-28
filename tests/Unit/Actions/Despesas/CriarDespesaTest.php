@@ -40,7 +40,7 @@ class CriarDespesaTest extends TestCase
         $despesa = $criarDespesa->execute($dados, $userMock);
 
         $this->assertSame($descricao, $despesa->descricao);
-        $this->assertSame($valor, $despesa->valor);
+        $this->assertSame($valor, $despesa->valor->emReais());
         $this->assertSame($dataDespesa, $despesa->data);
     }
 
