@@ -9,7 +9,9 @@ use App\Models\Despesa;
 use App\Models\User;
 use Carbon\Carbon;
 use DateTimeImmutable;
+use DomainException;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use InvalidArgumentException;
 use Mockery;
 
 class CriarDespesaTest extends TestCase
@@ -50,6 +52,42 @@ class CriarDespesaTest extends TestCase
             [$descricaoCom191Caracteres, 0.1, new DateTimeImmutable('2023-07-27')],
             ['seguro viagem', 100.0, new DateTimeImmutable('2022-12-01')],
             ['uber', 102500.59, new DateTimeImmutable('2005-01-02')]
+        ];
+    }
+
+    /**
+     * @dataProvider despesa_invalida_provider
+     */
+    public function test_despesa_invalida_gera_exception($valor, $dataDespesa, $exception, $erro)
+    {
+        Carbon::setTestNow('2023-07-27');
+
+        $dados = new CriarDespesaDTO(
+            'descricao',
+            $valor,
+            $dataDespesa,
+        );
+
+        $userMock = Mockery::mock(User::class);
+
+        $criarDespesa = new CriarDespesa();
+
+        $this->expectException($exception);
+        $this->expectExceptionMessage($erro);
+        
+        $criarDespesa->execute($dados, $userMock);
+    }
+
+    public static function despesa_invalida_provider()
+    {
+        $mensagemErroValorDespesa = 'valor da despesa nao pode ser negativo';
+        $mensagemErroDataDespesa = 'a data da despesa nao pode ser uma data futura';
+
+        return [
+            [-0.1, new DateTimeImmutable('2023-07-01'), InvalidArgumentException::class, $mensagemErroValorDespesa],
+            [-500.49, new DateTimeImmutable('2023-07-01'), InvalidArgumentException::class, $mensagemErroValorDespesa],
+            [10.55, new DateTimeImmutable('2023-08-01'), DomainException::class, $mensagemErroDataDespesa],
+            [10.55, new DateTimeImmutable('5001-12-28'), DomainException::class, $mensagemErroDataDespesa]
         ];
     }
 }
