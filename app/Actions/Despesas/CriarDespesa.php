@@ -5,6 +5,7 @@ namespace App\Actions\Despesas;
 use App\DataTransferObjects\Despesas\CriarDespesaDTO;
 use App\Models\Despesa;
 use App\Models\User;
+use App\Notifications\Despesas\DespesaCriada;
 use App\ValueObjects\Despesas\ValorDespesa;
 use DomainException;
 use Illuminate\Support\Carbon;
@@ -25,6 +26,7 @@ class CriarDespesa
 
         $user->despesas()->save($despesa);
 
+        $user->notify(new DespesaCriada($dados));
         return $despesa;
     }
 }
