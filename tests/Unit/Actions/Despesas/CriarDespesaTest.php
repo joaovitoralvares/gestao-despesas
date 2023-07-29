@@ -7,6 +7,7 @@ use App\Actions\Despesas\CriarDespesa;
 use App\DataTransferObjects\Despesas\CriarDespesaDTO;
 use App\Models\Despesa;
 use App\Models\User;
+use App\Notifications\Despesas\DespesaCriada;
 use Carbon\Carbon;
 use DateTimeImmutable;
 use DomainException;
@@ -34,6 +35,7 @@ class CriarDespesaTest extends TestCase
 
         $userMock->shouldReceive('despesas')->andReturn($hasManyDespesasMock);
         $hasManyDespesasMock->shouldReceive('save')->once();
+        $userMock->shouldReceive('notify')->with(Mockery::type(DespesaCriada::class));
 
         $criarDespesa = new CriarDespesa();
 

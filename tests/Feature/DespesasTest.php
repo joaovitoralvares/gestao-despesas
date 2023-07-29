@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Models\Despesa;
 use App\Models\User;
+use App\Notifications\Despesas\DespesaCriada;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class DespesasTest extends TestCase
@@ -15,6 +17,7 @@ class DespesasTest extends TestCase
 
     public function test_usuario_autenticado_pode_criar_despesa()
     {
+        Notification::fake();
         $user = User::factory()->create();
 
         $despesa = [
@@ -29,5 +32,6 @@ class DespesasTest extends TestCase
         $this->assertDatabaseCount('despesas', 1);
         $this->assertDatabaseHas('despesas', $despesa);
         $this->assertTrue($user->despesas->contains(Despesa::first()));
+        Notification::assertSentTo($user, DespesaCriada::class);
     }
 }
