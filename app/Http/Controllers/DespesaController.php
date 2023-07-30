@@ -40,6 +40,8 @@ class DespesaController extends Controller
 
     public function show(Despesa $despesa)
     {
+        $this->authorize('view', $despesa);
+
         return DespesaResource::make($despesa);
     }
 }
