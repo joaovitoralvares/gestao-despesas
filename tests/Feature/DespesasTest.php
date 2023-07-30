@@ -71,4 +71,13 @@ class DespesasTest extends TestCase
             'data' => $despesa->data
         ]);
     }
+
+    public function test_api_retorna_not_found_quando_despesa_nao_existe()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->getJson('api/despesas/id-inexistente');
+
+        $response->assertNotFound();
+    }
 }
