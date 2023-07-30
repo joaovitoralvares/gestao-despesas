@@ -80,4 +80,14 @@ class DespesasTest extends TestCase
 
         $response->assertNotFound();
     }
+
+    public function test_usuario_nao_pode_visualizar_despesa_de_outro_usuario()
+    {
+        $user = User::factory()->create();
+        $despesa = Despesa::factory()->for(User::factory())->create();
+
+        $response = $this->actingAs($user)->getJson("api/despesas/$despesa->id");
+
+        $response->assertNotFound();
+    }
 }
