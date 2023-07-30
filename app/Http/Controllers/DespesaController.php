@@ -7,6 +7,7 @@ use App\DataTransferObjects\Despesas\CriarDespesaDTO;
 use App\Http\Requests\StoreDespesaRequest;
 use App\Http\Resources\DespesaResource;
 use App\Models\Despesa;
+use App\ValueObjects\Despesas\ValorDespesa;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 
@@ -48,7 +49,15 @@ class DespesaController extends Controller
     public function destroy(Despesa $despesa)
     {
         $this->authorize('delete', $despesa);
-        
+
         $despesa->delete();
+    }
+
+    public function update(Request $request, Despesa $despesa)
+    {        
+        $despesa->descricao = $request->descricao;
+        $despesa->valor = new ValorDespesa($request->valor);
+        $despesa->data = $request->data;
+        $despesa->save();
     }
 }
