@@ -90,4 +90,16 @@ class DespesasTest extends TestCase
 
         $response->assertNotFound();
     }
+
+    public function test_usuario_autenticado_pode_excluir_despesa()
+    {
+        $user = User::factory()->create();
+        $despesa = Despesa::factory()->count(2)->for($user)->create()->first();
+
+        $response = $this->actingAs($user)->deleteJson("api/despesas/$despesa->id");
+
+        $response->assertOk();
+        $this->assertDatabaseMissing('despesas', ['id' => $despesa->id]);
+        $this->assertDatabaseCount('despesas', 1);
+    }
 }
