@@ -21,9 +21,11 @@ class DespesaPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Despesa $despesa): bool
+    public function update(User $user, Despesa $despesa): Response
     {
-        //
+        return $user->id === $despesa->user_id
+            ? Response::allow()
+            : Response::denyAsNotFound();
     }
 
     /**

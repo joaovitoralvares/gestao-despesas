@@ -54,7 +54,9 @@ class DespesaController extends Controller
     }
 
     public function update(Request $request, Despesa $despesa)
-    {        
+    {      
+        $this->authorize('update', $despesa);
+          
         $despesa->descricao = $request->descricao;
         $despesa->valor = new ValorDespesa($request->valor);
         $despesa->data = $request->data;
