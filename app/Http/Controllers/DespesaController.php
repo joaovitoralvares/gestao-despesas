@@ -44,4 +44,9 @@ class DespesaController extends Controller
 
         return DespesaResource::make($despesa);
     }
+
+    public function destroy(Despesa $despesa)
+    {
+        $despesa->delete();
+    }
 }
