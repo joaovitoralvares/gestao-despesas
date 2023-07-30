@@ -153,4 +153,41 @@ class DespesasTest extends TestCase
             'data' => $despesa->data,
         ]);
     }
+
+    /**
+     * @dataProvider despesa_invalida_provider
+     */
+    public function test_update_request_rejeita_despesa_invalida($descricao, $valor, $data, $erros)
+    {
+        Carbon::setTestNow('2023-07-27');
+
+        $user = User::factory()->create();
+        $despesa = Despesa::factory()->for($user)->create();
+
+        $despesaAtualizada = [
+            'descricao' => $descricao,
+            'valor' => $valor,
+            'data' => $data
+        ];
+
+        $response = $this->actingAs($user)->putJson("api/despesas/$despesa->id", $despesaAtualizada);
+
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors($erros);
+    }
+
+    public static function despesa_invalida_provider()
+    {
+        // descricao pode ter no maximo 191 caracteres
+        $descricaoComMaisDe191Caracteres = 'Lorem ipsum dolor sit amet, factoe latine consectetur adipiscing elit. Nulla bibendum odio nec ipsum consequat, nec malesuada purus cursus. Vestibulum auctor quam nec lectus malesuada commodo. Quisque susc';
+        
+        return [
+            [$descricaoComMaisDe191Caracteres, -0.1, '2023-07-01', ['descricao', 'valor']],
+            ['descricao', -500.49, '2023-07-01', ['valor']],
+            ['descricao', 10.55, '2023-08-01', ['data']],
+            [$descricaoComMaisDe191Caracteres, 10.55, '5001-12-28', ['descricao', 'data']],
+            ['descricao', -5, '12/03/2023', ['valor', 'data']],
+            [$descricaoComMaisDe191Caracteres, -5, '12/03/2023', ['descricao', 'valor', 'data']]
+        ];
+    }
 }
