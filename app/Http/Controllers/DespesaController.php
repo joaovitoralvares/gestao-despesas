@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Actions\Despesas\CriarDespesa;
 use App\DataTransferObjects\Despesas\CriarDespesaDTO;
 use App\Http\Requests\StoreDespesaRequest;
+use App\Http\Requests\UpdateDespesaRequest;
 use App\Http\Resources\DespesaResource;
 use App\Models\Despesa;
 use App\ValueObjects\Despesas\ValorDespesa;
@@ -53,10 +54,10 @@ class DespesaController extends Controller
         $despesa->delete();
     }
 
-    public function update(Request $request, Despesa $despesa)
+    public function update(UpdateDespesaRequest $request, Despesa $despesa)
     {      
         $this->authorize('update', $despesa);
-          
+
         $despesa->descricao = $request->descricao;
         $despesa->valor = new ValorDespesa($request->valor);
         $despesa->data = $request->data;
