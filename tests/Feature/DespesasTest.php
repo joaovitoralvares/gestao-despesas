@@ -55,4 +55,20 @@ class DespesasTest extends TestCase
                 )
         );
     }
+
+    public function test_usuario_autenticado_pode_visualizar_despesa()
+    {
+       $user = User::factory()->create();
+       $despesa = Despesa::factory()->for($user)->create();
+
+       $response = $this->actingAs($user)->getJson("api/despesas/$despesa->id");
+
+       $response->assertOk()
+        ->assertExactJson([
+            'id' => $despesa->id,
+            'descricao' => $despesa->descricao,
+            'valor' => $despesa->valor->emReais(),
+            'data' => $despesa->data
+        ]);
+    }
 }
