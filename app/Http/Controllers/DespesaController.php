@@ -6,6 +6,7 @@ use App\Actions\Despesas\CriarDespesa;
 use App\DataTransferObjects\Despesas\CriarDespesaDTO;
 use App\Http\Requests\StoreDespesaRequest;
 use App\Http\Resources\DespesaResource;
+use App\Models\Despesa;
 use DateTimeImmutable;
 use Illuminate\Http\Request;
 
@@ -35,5 +36,10 @@ class DespesaController extends Controller
                 ->orderBy('data', 'desc')
                 ->paginate()
             );
+    }
+
+    public function show(Despesa $despesa)
+    {
+        return DespesaResource::make($despesa);
     }
 }
