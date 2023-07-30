@@ -29,9 +29,11 @@ class DespesaPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Despesa $despesa): bool
+    public function delete(User $user, Despesa $despesa): Response
     {
-        //
+        return $user->id === $despesa->user_id
+            ? Response::allow()
+            : Response::denyAsNotFound();
     }
 
 }

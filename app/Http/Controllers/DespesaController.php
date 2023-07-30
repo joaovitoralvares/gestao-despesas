@@ -47,6 +47,8 @@ class DespesaController extends Controller
 
     public function destroy(Despesa $despesa)
     {
+        $this->authorize('delete', $despesa);
+        
         $despesa->delete();
     }
 }
