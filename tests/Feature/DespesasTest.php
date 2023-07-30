@@ -131,4 +131,26 @@ class DespesasTest extends TestCase
         $response->assertOk();
         $this->assertDatabaseHas('despesas', ['id' => $despesa->id, ...$despesaAtualizada]);
     }
+
+    public function test_usuario_autenticado_nao_pode_atualizar_despesa_de_outro_usuario()
+    {
+        $user = User::factory()->create();
+        $despesa = Despesa::factory()->for(User::factory())->create();
+
+        $despesaAtualizada = [
+            'descricao' => 'gastos com uber',
+            'valor' => 15.5,
+            'data' => '2023-07-30'
+        ];
+
+        $response = $this->actingAs($user)->putJson("api/despesas/$despesa->id", $despesaAtualizada);
+
+        $response->assertNotFound();
+        $this->assertDatabaseHas('despesas', [
+            'id' => $despesa->id,
+            'descricao' => $despesa->descricao,
+            'valor' => $despesa->valor->emReais(),
+            'data' => $despesa->data,
+        ]);
+    }
 }
