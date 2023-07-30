@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Despesa;
 use App\Models\User;
 use App\Notifications\Despesas\DespesaCriada;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -112,5 +113,22 @@ class DespesasTest extends TestCase
 
         $response->assertNotFound();
         $this->assertDatabaseHas('despesas', ['id' => $despesa->id]);
+    }
+
+    public function test_usuario_autenticado_pode_atualizar_despesa()
+    {
+        $user = User::factory()->create();
+        $despesa = Despesa::factory()->for($user)->create();
+
+        $despesaAtualizada = [
+            'descricao' => 'gastos com uber',
+            'valor' => 15.5,
+            'data' => '2023-07-30'
+        ];
+
+        $response = $this->actingAs($user)->putJson("api/despesas/$despesa->id", $despesaAtualizada);
+
+        $response->assertOk();
+        $this->assertDatabaseHas('despesas', ['id' => $despesa->id, ...$despesaAtualizada]);
     }
 }
