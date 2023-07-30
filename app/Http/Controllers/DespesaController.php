@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Actions\Despesas\CriarDespesa;
 use App\DataTransferObjects\Despesas\CriarDespesaDTO;
 use App\Http\Requests\StoreDespesaRequest;
+use App\Http\Resources\DespesaResource;
 use DateTimeImmutable;
+use Illuminate\Http\Request;
 
 class DespesaController extends Controller
 {
@@ -23,5 +25,15 @@ class DespesaController extends Controller
         $this->criarDespesa->execute($despesa, $user);
 
         return response('despesa criada', 201);
+    }
+
+    public function index(Request $request)
+    {
+        return DespesaResource::collection(
+            $request->user()
+                ->despesas()
+                ->orderBy('data', 'desc')
+                ->paginate()
+            );
     }
 }
