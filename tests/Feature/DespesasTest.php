@@ -102,4 +102,15 @@ class DespesasTest extends TestCase
         $this->assertDatabaseMissing('despesas', ['id' => $despesa->id]);
         $this->assertDatabaseCount('despesas', 1);
     }
+
+    public function test_usuario_autenticado_nao_pode_excluir_despesa_de_outro_usuario()
+    {
+        $user = User::factory()->create();
+        $despesa = Despesa::factory()->for(User::factory())->create();
+
+        $response = $this->actingAs($user)->deleteJson("api/despesas/$despesa->id");
+
+        $response->assertNotFound();
+        $this->assertDatabaseHas('despesas', ['id' => $despesa->id]);
+    }
 }
