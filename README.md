@@ -53,15 +53,15 @@ docker run --rm \
     composer install --ignore-platform-reqs
 ```
 
-Execute o comando:
-```console
-./vendor/bin/sail artisan key:generate
-```
-
 Inicie a aplicação:
 ```console
 ./vendor/bin/sail up -d
 
+```
+
+Execute o comando:
+```console
+./vendor/bin/sail artisan key:generate
 ```
 
 Execute as migrations:
