@@ -133,7 +133,12 @@ class DespesasTest extends TestCase
 
         $response = $this->actingAs($user)->putJson("api/despesas/$despesa->id", $despesaAtualizada);
 
-        $response->assertOk();
+        $response->assertOk()
+            ->assertJson([
+                'descricao' => 'gastos com uber',
+                'valor' => 15.5,
+                'data' => '30/07/2023'
+            ]);
         $this->assertDatabaseHas('despesas', ['id' => $despesa->id, ...$despesaAtualizada]);
     }
 
