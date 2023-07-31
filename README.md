@@ -83,5 +83,5 @@ Os emails enviados estarão acessíveis através da url http://localhost:8025/
 Atualmente, existe esta collection no postman com exemplos referentes aos endpoints de usuários e despesas.
 https://www.postman.com/crimson-robot-271477/workspace/gestao-despesas/collection/15814016-30e6a835-ae99-458a-a579-a3d415c94d24
 
-### TODO
-Adicionar documentação da api utilizando swagger ui
+### TO DO:
+- Adicionar documentação da api utilizando swagger ui
