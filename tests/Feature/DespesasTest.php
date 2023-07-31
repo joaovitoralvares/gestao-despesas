@@ -176,6 +176,27 @@ class DespesasTest extends TestCase
             ->assertJsonValidationErrors($erros);
     }
 
+    /**
+     * @dataProvider despesa_invalida_provider
+     */
+    public function test_store_request_rejeita_despesa_invalida($descricao, $valor, $data, $erros)
+    {
+        Carbon::setTestNow('2023-07-27');
+
+        $user = User::factory()->create();
+
+        $despesa = [
+            'descricao' => $descricao,
+            'valor' => $valor,
+            'data' => $data
+        ];
+
+        $response = $this->actingAs($user)->postJson('api/despesas', $despesa);
+
+        $response->assertUnprocessable()
+            ->assertJsonValidationErrors($erros);
+    }
+
     public static function despesa_invalida_provider()
     {
         // descricao pode ter no maximo 191 caracteres
