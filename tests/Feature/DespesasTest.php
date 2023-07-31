@@ -28,9 +28,14 @@ class DespesasTest extends TestCase
             'valor' => 200.58
         ];
 
-        $response = $this->actingAs($user)->post('/api/despesas', $despesa);
+        $response = $this->actingAs($user)->postJson('/api/despesas', $despesa);
 
-        $response->assertStatus(201);
+        $response->assertStatus(201)
+            ->assertJson([
+                'descricao' => 'Gastos com Uber',
+                'data' => '25/04/2023',
+                'valor' => 200.58
+            ]);
         $this->assertDatabaseCount('despesas', 1);
         $this->assertDatabaseHas('despesas', $despesa);
         $this->assertTrue($user->despesas->contains(Despesa::first()));
@@ -69,7 +74,7 @@ class DespesasTest extends TestCase
             'id' => $despesa->id,
             'descricao' => $despesa->descricao,
             'valor' => $despesa->valor->emReais(),
-            'data' => $despesa->data
+            'data' => $despesa->data->format(Despesa::DEFAULT_DATE_FORMAT)
         ]);
     }
 
