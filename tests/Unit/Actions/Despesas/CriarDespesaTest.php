@@ -43,7 +43,10 @@ class CriarDespesaTest extends TestCase
 
         $this->assertSame($descricao, $despesa->descricao);
         $this->assertSame($valor, $despesa->valor->emReais());
-        $this->assertSame($dataDespesa, $despesa->data);
+        $this->assertSame(
+            $dataDespesa->format(Despesa::DEFAULT_DATE_FORMAT),
+            $despesa->data->format(Despesa::DEFAULT_DATE_FORMAT)
+        );
     }
 
     public static function criar_despesa_provider()
