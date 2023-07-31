@@ -62,5 +62,7 @@ class DespesaController extends Controller
         $despesa->valor = new ValorDespesa($request->valor);
         $despesa->data = $request->data;
         $despesa->save();
+
+        return DespesaResource::make($despesa);
     }
 }
