@@ -9,6 +9,7 @@ use App\Http\Controllers\DespesaController;
 use App\Http\Requests\StoreDespesaRequest;
 use App\Models\Despesa;
 use App\Models\User;
+use App\ValueObjects\Despesas\ValorDespesa;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Mockery;
 
@@ -16,27 +17,29 @@ class DespesaControllerTest extends TestCase
 {
     public function test_metodo_store_executa_action_criar_despesa()
     {
-        $despesa = [
+        $dados = [
             'descricao' => 'Gastos com Uber',
             'data' => '2023-04-25',
             'valor' => 200.58
         ];
+        $despesa = Despesa::factory()->make();
+        $user = User::factory()->make();
         
-        $user = Mockery::mock(User::class);
-        
-        $request = $this->mock(StoreDespesaRequest::class, function ($mock) use ($user, $despesa) {
-            $mock->shouldReceive('user')->once()->andReturn($user);
-            $mock->shouldReceive('all')->andReturn($despesa);
-        });
+        $request = $this->partialMock(StoreDespesaRequest::class, fn ($mock) =>
+            $mock->shouldReceive('user')->andReturn($user)
+        );
+        $request->initialize($dados);
 
-        $this->mock(CriarDespesa::class, function ($mock) {
+        $this->mock(CriarDespesa::class, function ($mock) use ($despesa) {
             $mock
                 ->shouldReceive('execute')
                 ->with(Mockery::type(CriarDespesaDTO::class), Mockery::type(User::class))
-                ->once();
+                ->once()
+                ->andReturn($despesa);
         });
 
         $controller = app()->make(DespesaController::class);
+
         $controller->store($request);
     }
 }
