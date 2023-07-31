@@ -13,6 +13,12 @@ class Despesa extends Model
 {
     use HasFactory, HasUuids;
 
+    public const DEFAULT_DATE_FORMAT = 'd/m/Y';
+
+    protected $casts = [
+        'data' => 'date:' . self::DEFAULT_DATE_FORMAT,
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

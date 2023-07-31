@@ -25,9 +25,9 @@ class DespesaController extends Controller
             new DateTimeImmutable($request->data),
         );
 
-        $this->criarDespesa->execute($despesa, $user);
+        $despesaCriada = $this->criarDespesa->execute($despesa, $user);
 
-        return response('despesa criada', 201);
+        return response()->json(DespesaResource::make($despesaCriada), 201);
     }
 
     public function index(Request $request)
