@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Notifications\Despesas\DespesaCriada;
 use DateTimeImmutable;
 use Illuminate\Notifications\SendQueuedNotifications;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 

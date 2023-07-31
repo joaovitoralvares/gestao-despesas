@@ -9,8 +9,6 @@ use App\Http\Controllers\DespesaController;
 use App\Http\Requests\StoreDespesaRequest;
 use App\Models\Despesa;
 use App\Models\User;
-use App\ValueObjects\Despesas\ValorDespesa;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Mockery;
 
 class DespesaControllerTest extends TestCase
