@@ -23,7 +23,7 @@ class StoreDespesaRequest extends FormRequest
     {
         return [
             'descricao' => ['required', 'string', 'max:191'],
-            'data' => ['required', 'date_format:Y-m-d'],
+            'data' => ['required', 'date_format:Y-m-d', 'before:tomorrow'],
             'valor' => ['required', 'numeric', 'gt:0']
         ];
     }

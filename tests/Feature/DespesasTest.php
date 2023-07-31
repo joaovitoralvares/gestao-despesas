@@ -203,7 +203,7 @@ class DespesasTest extends TestCase
         $descricaoComMaisDe191Caracteres = 'Lorem ipsum dolor sit amet, factoe latine consectetur adipiscing elit. Nulla bibendum odio nec ipsum consequat, nec malesuada purus cursus. Vestibulum auctor quam nec lectus malesuada commodo. Quisque susc';
         
         return [
-            [$descricaoComMaisDe191Caracteres, -0.1, '2023-07-01', ['descricao', 'valor']],
+            [$descricaoComMaisDe191Caracteres, -0.1, '2023-07-27', ['descricao', 'valor']],
             ['descricao', -500.49, '2023-07-01', ['valor']],
             ['descricao', 10.55, '2023-08-01', ['data']],
             [$descricaoComMaisDe191Caracteres, 10.55, '5001-12-28', ['descricao', 'data']],
