@@ -85,3 +85,8 @@ https://www.postman.com/crimson-robot-271477/workspace/gestao-despesas/collectio
 
 ### TO DO:
 - Adicionar documentação da api utilizando swagger ui
+  
+## TESTES
+```console
+./vendor/bin/sail phpunit
+```
